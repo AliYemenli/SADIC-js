@@ -1,0 +1,26 @@
+{
+  "name": "sadic",
+  "version": "1.0.0",
+  "description": "A discord bot for me and my bro.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "SADIC-js"
+  },
+  "keywords": [
+    "Discord",
+    "Bot"
+  ],
+  "author": "Ali Yemenli",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "eslint": "^9.6.0"
+  }
+}
