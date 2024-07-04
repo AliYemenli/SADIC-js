@@ -17,8 +17,7 @@
   "author": "Ali Yemenli",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.15.3",
-    "dotenv": "^16.4.5"
+    "discord.js": "^14.15.3"
   },
   "devDependencies": {
     "eslint": "^9.6.0"
