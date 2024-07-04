@@ -12,6 +12,8 @@ const client = new Client({intents: [GatewayIntentBits.Guilds]});
 
 client.commands = new Collection();
 
+// *? Handling the command files
+
 // Path to the commands folder
 const commandsFolderPath = path.join(__dirname,"commands");  // root/commands
 // Reads the specified commands folder directory
@@ -40,6 +42,7 @@ for(const subCommandFolder of commandsFolderDirectories)  {
 
 
 
+//? Login process
 
 // This code block works for only once when Client is ready
 client.once(Events.ClientReady, readyClient =>  {
@@ -50,4 +53,31 @@ client.once(Events.ClientReady, readyClient =>  {
 // This is how a Instance log into Discord.
 client.login(token);
 
+
+//? Handling the command execution
+
+//? Not every interaction is a slash command, (MessageComponent Interactions etc)
+
+client.on(Events.InteractionCreate, async interaction => {
+    if(!interaction.isChatInputCommand())   return;    //* If interaction is not came from via chat, return undefined   
+    
+    const command = interaction.client.commands.get(interaction.commandName);
+
+    //* if there is no such command
+    if(!command)  {
+        console.error(`${interaction.commandName}: there is no such command`);
+        return;
+    }
+
+    try {
+        await command.execute(interaction)
+    } catch (error) {
+        console.error(error);
+        if(interaction.replied || interaction.deferred)  {
+            await interaction.followUp({content: "There was an error while executing this command!",ephemeral: true});
+        } else  {
+            await interaction.reply({content: "There was an error while executing this command", ephemeral: true});
+        }
+    }
+});
 
