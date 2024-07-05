@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 // Getting the required Discord.js Library Classes
-const {Client, Collection, Events, GatewayIntentBits} = require("discord.js");
+const {Client, Collection, GatewayIntentBits} = require("discord.js");
 // Getting Discord Bot Token from config file
 const {token} = require("./config.json");
 
@@ -26,58 +26,39 @@ for(const subCommandFolder of commandsFolderDirectories)  {
 
     for(const modulePath of files)  {
         const filePath = path.join(subCommandFilePaths,modulePath);  //  root/commands/utility/ping.js
-        const module = require(filePath);
+        const moduleCustom = require(filePath);
         
 
         // For every command file , setting a new item in the collection. Data stored with command's name and its functionality
 
-        if("data" in module && "execute" in module)  {
-            client.commands.set(module.data.name,module);
+        if("data" in moduleCustom && "execute" in moduleCustom)  {
+            client.commands.set(moduleCustom.data.name,moduleCustom);
         }  else  {
             console.log(`[WARNING] The command ${filePath} is missing a required "data" or "execute" property.`);
         }
     }
 }
 
+//? Event files handling
 
+const eventsPath = path.join(__dirname,"events");
+const eventFiles = fs.readdirSync(eventsPath).filter(z => z.endsWith(".js"));
 
+for(const eventFile of eventFiles)  {
+    const eventFilePath = path.join(eventsPath,eventFile);
+    const event = require(eventFilePath);
+    
+    if(event.once)  {
+        client.once(event.name, (...args)  => event.execute(...args));
+    }  else  {
+        client.on(event.name,(...args) => event.execute(...args));
+    }
+}
 
 //? Login process
-
-// This code block works for only once when Client is ready
-client.once(Events.ClientReady, readyClient =>  {
-    console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-});
-
 // Login process with the token that acquired from config file
 // This is how a Instance log into Discord.
 client.login(token);
 
 
-//? Handling the command execution
-
-//? Not every interaction is a slash command, (MessageComponent Interactions etc)
-
-client.on(Events.InteractionCreate, async interaction => {
-    if(!interaction.isChatInputCommand())   return;    //* If interaction is not came from via chat, return undefined   
-    
-    const command = interaction.client.commands.get(interaction.commandName);
-
-    //* if there is no such command
-    if(!command)  {
-        console.error(`${interaction.commandName}: there is no such command`);
-        return;
-    }
-
-    try {
-        await command.execute(interaction)
-    } catch (error) {
-        console.error(error);
-        if(interaction.replied || interaction.deferred)  {
-            await interaction.followUp({content: "There was an error while executing this command!",ephemeral: true});
-        } else  {
-            await interaction.reply({content: "There was an error while executing this command", ephemeral: true});
-        }
-    }
-});
 
