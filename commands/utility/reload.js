@@ -1,5 +1,4 @@
 const {SlashCommandBuilder, isEquatable} = require("discord.js");
-const { execute } = require("../../events/interactionCreate");
 
 
 //! Examine

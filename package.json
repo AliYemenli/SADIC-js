@@ -4,7 +4,7 @@
   "description": "A discord bot for me and my bro.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "node deploy-commands-test.js && echo Waiting for login... && node index.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
+    "axios": "^1.7.2",
     "discord.js": "^14.15.3",
     "ffmpeg-static": "^5.2.0",
     "ytdl-core": "^4.11.5"
