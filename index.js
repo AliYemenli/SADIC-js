@@ -1,3 +1,6 @@
+require("dotenv").config();
+const mongoose = require("mongoose");
+mongoose.connect(process.env.mongodb, { useNewUrlParser: true, useUnifiedTopology: true }).then(console.log('Connected to Mongodb.'));
 const fs = require("fs");
 const path = require("path");
 
@@ -12,7 +15,7 @@ const client = new Client({intents: [GatewayIntentBits.Guilds]});
 
 client.commands = new Collection();
 
-// *? Handling the command files
+//"n" *? Handling the command files
 
 // Path to the commands folder
 const commandsFolderPath = path.join(__dirname,"commands");  // root/commands
