@@ -1,6 +1,6 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-mongoose.connect(process.env.mongodb, { useNewUrlParser: true, useUnifiedTopology: true }).then(console.log('Connected to Mongodb.'));
+mongoose.connect(process.env.mongodb).then(console.log('Connected to Mongodb.'));
 const fs = require("fs");
 const path = require("path");
 
