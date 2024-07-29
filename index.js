@@ -15,7 +15,9 @@ const client = new Client({intents: [GatewayIntentBits.Guilds]});
 
 client.commands = new Collection();
 
-//"n" *? Handling the command files
+
+
+//#region  Handling the command files
 
 // Path to the commands folder
 const commandsFolderPath = path.join(__dirname,"commands");  // root/commands
@@ -41,8 +43,10 @@ for(const subCommandFolder of commandsFolderDirectories)  {
         }
     }
 }
+//#endregion
 
-//? Event files handling
+
+//#region Event files handling
 
 const eventsPath = path.join(__dirname,"events");
 const eventFiles = fs.readdirSync(eventsPath).filter(z => z.endsWith(".js"));
@@ -57,6 +61,9 @@ for(const eventFile of eventFiles)  {
         client.on(event.name,(...args) => event.execute(...args));
     }
 }
+
+//#endregion
+
 
 //? Login process
 // Login process with the token that acquired from config file

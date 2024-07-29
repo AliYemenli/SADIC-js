@@ -2,10 +2,11 @@ const {model, Schema} = require("mongoose");
 
 let schema = new Schema({
     user: String,
-    isPersonal: Boolean,
+    userName: String,
     reminders: [{
         time: String,
-        text: String
+        text: String,
+        isPersonal: Boolean
     }]
 });
 
