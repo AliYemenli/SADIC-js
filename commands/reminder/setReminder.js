@@ -1,4 +1,4 @@
-const {SlashCommandBuilder, time} = require("discord.js");
+const {SlashCommandBuilder,EmbedBuilder} = require("discord.js");
 const moment = require("moment");
 let appRoot = require("app-root-path");
 var ReminderSchema = require(appRoot + "/models/reminder.js");
@@ -39,6 +39,13 @@ module.exports = {
         const now = moment();
         const duration = moment.duration(date.diff(now));
 
+        const embed = new EmbedBuilder()
+                .setColor(0x00099FF)
+                .setTitle(`Your reminded has been set.`)
+                .setAuthor({name: "SADIC", iconURL: "https://familyguyaddicts.com/wp-content/uploads/2015/01/new-years-brian-drunk.png" })
+                .setImage("https://static.wikia.nocookie.net/surrealmemes/images/9/98/Commander_Brian.png/revision/latest?cb=20181115155126")
+                .setTimestamp();
+
         if(duration.asMilliseconds() <= 0) {
             return interaction.reply({content:"We are not in Interstellar. Give me a future date :|", ephemeral: isPersonal});
         }
@@ -64,7 +71,7 @@ module.exports = {
                     }]
                 });
             }
-            interaction.reply({content:`Your reminder has been set to ${date}`, ephemeral: isPersonal});
+            interaction.reply({embeds:[embed], ephemeral: isPersonal});
         } catch (error) {
             interaction.reply({content:"Oopsiee! I forgot to say that I have Alzheimers :)", ephemeral: isPersonal});
         }
