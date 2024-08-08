@@ -1,5 +1,5 @@
 const {SlashCommandBuilder,EmbedBuilder} = require("discord.js");
-const moment = require("moment");
+const moment = require("moment-timezone");
 let appRoot = require("app-root-path");
 var ReminderSchema = require(appRoot + "/models/reminder.js");
 
@@ -31,25 +31,25 @@ module.exports = {
         const isPersonal = interaction.options.getBoolean("personal") || false;
 
         //#region Date Check 
-        const date = moment(dateInput, "HH:mm DD-MM-YYYY");
+        const date = moment.tz(dateInput, "HH:mm DD-MM-YYYY","Europe/Istanbul");
         if(!date.isValid())  {
             return interaction.reply({content:"Invalid date format. Please use HH:mm DD-MM-YYYY.",ephemeral: isPersonal});
         }
 
-        const now = moment();
+        const now = moment.tz("Europe/Istanbul");
         const duration = moment.duration(date.diff(now));
 
-        const embed = new EmbedBuilder()
-                .setColor(0x00099FF)
-                .setTitle(`Your reminded has been set.`)
-                .setAuthor({name: "SADIC", iconURL: "https://familyguyaddicts.com/wp-content/uploads/2015/01/new-years-brian-drunk.png" })
-                .setImage("https://static.wikia.nocookie.net/surrealmemes/images/9/98/Commander_Brian.png/revision/latest?cb=20181115155126")
-                .setTimestamp();
-
+        
         if(duration.asMilliseconds() <= 0) {
             return interaction.reply({content:"We are not in Interstellar. Give me a future date :|", ephemeral: isPersonal});
         }
         //#endregion
+        const embed = new EmbedBuilder()
+                .setColor(0x00099FF)
+                .setTitle(`Your reminded has been set to ${date.format("HH:mm DD-MM-YYYY [TRT]")}.`)
+                .setAuthor({name: "SADIC", iconURL: "https://familyguyaddicts.com/wp-content/uploads/2015/01/new-years-brian-drunk.png" })
+                .setImage("https://static.wikia.nocookie.net/surrealmemes/images/9/98/Commander_Brian.png/revision/latest?cb=20181115155126")
+                .setTimestamp();
 
         try {
             let userReminder = await ReminderSchema.findOne({user: interaction.user.id});
